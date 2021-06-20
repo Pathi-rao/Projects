@@ -1,12 +1,16 @@
+'''
+This file is only for testing things
+    '''
 import torchvision
 import matplotlib.pyplot as plt
 import numpy as np
 import datahandler as dh
 
 #pre_preocessor function takes absolute path and batch_size as arguments
+batch_size = 2
 train_loader, test_loader = dh.pre_processor(
                                 'C:\\Users\\User\\Desktop\\Strive_School\\Github\\Datasets\\archive\\fer2013\\',
-                                2)
+                                batch_size)
 
 # print(train_loader)
 # print(test_loader)
@@ -28,10 +32,11 @@ print(images.shape)
 # show images
 imshow(torchvision.utils.make_grid(images))
 # print labels
-print(' '.join('%5s' % classes[labels[j]] for j in range(2))) #2 is the batch_size
+print(' '.join('%5s' % classes[labels[j]] for j in range(batch_size))) #2 is the batch_size
 
 
 
+# alternative way to test the dataloader and display images
 # def imshow(image, ax=None, title=None, normalize=False):
 #     """Imshow for Tensor."""
 #     if ax is None:

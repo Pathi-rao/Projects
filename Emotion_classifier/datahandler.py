@@ -69,4 +69,5 @@ def pre_processor(root_dir, batchsize):
                                           shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=batchsize,
                                           shuffle=False)
+                                          
     return train_loader, test_loader
