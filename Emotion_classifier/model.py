@@ -1,30 +1,53 @@
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
+from torch.nn import Linear, ReLU, CrossEntropyLoss, Sequential, Conv2d, MaxPool2d, Module, Softmax, BatchNorm2d, Dropout
+from torch.nn.modules import batchnorm
+from torchsummary import summary
 
 
-class Net(nn.Module):
+class CNN(Module):
+    
     def __init__(self):
-        super().__init__()
-        self.conv1 = nn.Conv2d(3, 6, 5)
-        self.pool = nn.MaxPool2d(2, 2)
-        self.conv2 = nn.Conv2d(6, 16, 5)
-        self.fc1 = nn.Linear(16 * 5 * 5, 120)
-        self.fc2 = nn.Linear(120, 84)
-        self.fc3 = nn.Linear(84, 10)
+        super(CNN,self).__init__()
+
+        self.cnn_layers = Sequential(
+            Conv2d(1, 512, kernel_size=3, stride=2),
+            Dropout(0.2, inplace= True),
+            BatchNorm2d(512),
+            ReLU(inplace=True),
+
+            #MaxPool2d(kernel_size=2, stride=2),
+            Conv2d(512, 256, kernel_size=3, stride=2),
+            Dropout(0.2, inplace= True),
+            BatchNorm2d(256),
+            ReLU(inplace=True),
+
+            Conv2d(256, 128, kernel_size=3, stride=2),
+            Dropout(0.2, inplace= True),
+            BatchNorm2d(128),
+            ReLU()
+            #MaxPool2d(kernel_size=2, stride=2),
+        )
+
+        self.linear = Sequential(
+            Linear(128*63*63, 512),
+            Dropout(0.2, inplace= True),
+
+            Linear(512, 256),
+            Dropout(0.2, inplace= True),
+
+            Linear(256, 128),
+            Dropout(0.2, inplace= True),
+
+            Linear(128, 64),
+            Dropout(0.2, inplace= True),
+
+            Linear(64, 7) #7 classes
+        )
 
     def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.conv2(x)))
-        x = torch.flatten(x, 1) # flatten all dimensions except batch
-        x = F.relu(self.fc1(x))
-        x = F.relu(self.fc2(x))
-        x = self.fc3(x)
+        x = self.cnn_layers(x)
+        x = x.view(x.size(0), -1)
+        x = self.linear(x)
         return x
 
-
-model = Net()
-
-criterion = nn.CrossEntropyLoss()
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+model = CNN()
+summary(model, (1, 28, 28))
