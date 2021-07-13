@@ -1,3 +1,5 @@
+#pydoc. version of neural style transfer
+
 from __future__ import print_function
 import PIL
 from matplotlib import image
