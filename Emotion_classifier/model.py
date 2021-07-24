@@ -1,4 +1,4 @@
-from torch.nn import Linear, ReLU, CrossEntropyLoss, Sequential, Conv2d, MaxPool2d, Module, Softmax, BatchNorm2d, Dropout
+from torch.nn import Linear, ReLU, Sequential, Conv2d, Module, BatchNorm2d, Dropout, MaxPool2d
 from torch.nn.modules import batchnorm
 from torchsummary import summary
 
@@ -23,8 +23,8 @@ class CNN(Module):
             Conv2d(256, 128, kernel_size=3, stride=2),
             Dropout(0.2, inplace= True),
             BatchNorm2d(128),
-            ReLU()
-            #MaxPool2d(kernel_size=2, stride=2),
+            ReLU(),
+            MaxPool2d(kernel_size=2, stride=2),
         )
 
         self.linear = Sequential(
