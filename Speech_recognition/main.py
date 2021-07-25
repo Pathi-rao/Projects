@@ -30,3 +30,17 @@ with harvard_audio as source:
     audio = r.record(source) # read the entire audio file into an audio data instance
 
 print(r.recognize_google(audio))
+
+
+# to recognize for a specific duration
+
+# r.recognize_google(audio)
+#  with harvard_audio as source:
+# audio1 = r.record(source, duration=5)
+
+
+#  we can also offset the start time of the recording
+
+# r.recognize_google(audio)
+#  with harvard_audio as source:
+# audio1 = r.record(source, offset=4, duration=5)
