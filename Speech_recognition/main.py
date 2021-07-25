@@ -2,6 +2,8 @@ import speech_recognition as sr
 
 print(sr.__version__)
 
+# Find the theory here: https://www.notion.so/Speech-recognition-002da71de5774fd0a469ef79f711fd07
+
 """
     There are 7 methods to recognize speech from an audio source using different APIs.
     1. recognize_bing(): Microsoft Bing Speech
