@@ -1,0 +1,23 @@
+Layer architecture for the facial expression model.
+
+- Input imgae is a grayscale and of size 48*48 so the shape would be (1,48*48)
+
+- The first conv layer is of (inp=1, out=512)
+    The image tensor would be (48 - 3 + 2*0)/2 + 1 = 23
+    where 3 is kernel size, 0 is padding and bottom 2 is stride. Final tensor would be of size
+    512*23*23
+
+- The second conv layer is (inp=512, out=256)
+    The image tensor would be (23 - 3 + 2*0)/2 + 1 = 11
+    where 3 is kernel size, 0 is padding and bottom 2 is stride. Final tensor would be of size
+    256*11*11
+
+- The thirs conv layer is (inp=256, out=128)
+    The image tensor would be (11 - 3 + 2*0)/2 + 1 = 5
+    where 3 is kernel size, 0 is padding and bottom 2 is stride. Final tensor would be of size
+    128*5*5
+
+- We apply max pool after this. So, it will become - 128*2*2
+
+This will be the input dimensions that we need to pass in for the linear layer.
+
