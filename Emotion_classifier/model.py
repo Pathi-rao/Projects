@@ -14,6 +14,9 @@ class CNN(Module):
             BatchNorm2d(512),
             ReLU(inplace=True),
 
+            # ((layer_size - kernel_size + 2 * padding) / stride) + 1
+            # padding_default = 0, stride_default = 1
+
             #MaxPool2d(kernel_size=2, stride=2),
             Conv2d(512, 256, kernel_size=3, stride=2),
             Dropout(0.2, inplace= True),
@@ -24,11 +27,12 @@ class CNN(Module):
             Dropout(0.2, inplace= True),
             BatchNorm2d(128),
             ReLU(),
+
             MaxPool2d(kernel_size=2, stride=2),
         )
 
         self.linear = Sequential(
-            Linear(128*63*63, 512),
+            Linear(128*2*2, 512),
             Dropout(0.2, inplace= True),
 
             Linear(512, 256),
@@ -50,4 +54,5 @@ class CNN(Module):
         return x
 
 model = CNN()
-summary(model, (1, 28, 28))
+
+summary(model, (1, 48, 48))
