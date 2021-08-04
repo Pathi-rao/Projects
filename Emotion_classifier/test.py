@@ -16,7 +16,7 @@ train_loader, test_loader = dh.pre_processor(
 # print(test_loader)
 
 classes = ('Angry', 'Disgust', 'Fear', 'Happy',
-           'Neutral', 'Sad', 'Surprise')
+            'Neutral', 'Sad', 'Surprise')
 
 def imshow(img):
     img = img / 2 + 0.5     # unnormalize
@@ -35,6 +35,13 @@ imshow(torchvision.utils.make_grid(images))
 print(' '.join('%5s' % classes[labels[j]] for j in range(batch_size))) #2 is the batch_size
 
 
+"""
+    If you run  the script till this point, it will return 3 outputs. 
+    1. displays the images
+    2. Torch size such as ([2 ,1 ,48, 48)] where 2 is the batch size of images that are being loaded,
+        1 is the grayscale images and 48*48 is the image size.
+    3. Classes of the images
+    """
 
 # alternative way to test the dataloader and display images
 # def imshow(image, ax=None, title=None, normalize=False):
