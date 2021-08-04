@@ -15,19 +15,19 @@ To do so, you need to structure your data as follows:
 
 root_dir
     |_train
-        |_class1
+        |_class_1
             |_xxx.png
         .....
         .....    
-        |_classn
+        |_class_n
             |_xxx.png
 
     |_validation
-        |_class1
+        |_class_1
             |_xxx.png
         .....
         .....
-        |_classn
+        |_class_n
             |_xxx.png
 
 that means that each class has its own directory.
@@ -37,25 +37,27 @@ By giving this structure, the name of the class will be taken by the name of the
     '''
 
 
+# define a function which takes in path of root_directory, batchsize anad returns the dataloaders
+# for both train and test.
 def pre_processor(root_dir, batchsize):
 
     train_transforms = transforms.Compose([transforms.Grayscale(num_output_channels=1),
                                         #just to make sure everything is grayscale
                                         #transforms.Resize(255),
-                                       transforms.RandomRotation(30),
-                                       #transforms.RandomResizedCrop(224),
-                                       transforms.RandomHorizontalFlip(),
-                                       transforms.ToTensor(),
-                                       transforms.Normalize([0.5], [0.5])])    # this is for graysclae images
+                                        transforms.RandomRotation(30),
+                                        #transforms.RandomResizedCrop(224),
+                                        transforms.RandomHorizontalFlip(),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize([0.5], [0.5])])    # this is for graysclae images
                                     #    transforms.Normalize([0.5, 0.5, 0.5], # this is for RGB images
                                     #                         [0.5, 0.5, 0.5])
 
 
     test_transforms = transforms.Compose([transforms.Grayscale(num_output_channels=1),
-                                      #transforms.Resize(255),
-                                      #transforms.CenterCrop(224),
-                                      transforms.ToTensor(),
-                                      transforms.Normalize([0.5], [0.5])])
+                                        #transforms.Resize(255),
+                                        #transforms.CenterCrop(224),
+                                        transforms.ToTensor(),
+                                        transforms.Normalize([0.5], [0.5])])
                                     #   transforms.Normalize([0.5, 0.5, 0.5], 
                                     #                        [0.5, 0.5, 0.5])])
 
@@ -66,8 +68,8 @@ def pre_processor(root_dir, batchsize):
 
     # create the dataloaders
     train_loader = torch.utils.data.DataLoader(train_data, batch_size=batchsize,
-                                          shuffle=True)
+                                            shuffle=True)
     test_loader = torch.utils.data.DataLoader(test_data, batch_size=batchsize,
-                                          shuffle=False)
-                                          
+                                            shuffle=False)
+
     return train_loader, test_loader
