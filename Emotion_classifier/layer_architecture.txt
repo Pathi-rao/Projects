@@ -1,6 +1,6 @@
-Layer architecture for the facial expression model.
+********   Layer architecture for the facial expression model   ********
 
-- Input imgae is a grayscale and of size 48*48 so the shape would be (1,48*48)
+- Input image is a grayscale and of size 48*48 so the shape would be (1,48*48)
 
 - The first conv layer is of (inp=1, out=512)
     The image tensor would be (48 - 3 + 2*0)/2 + 1 = 23
@@ -21,3 +21,21 @@ Layer architecture for the facial expression model.
 
 This will be the input dimensions that we need to pass in for the linear layer.
 
+
+############################## +++++++++++++++++++++++++++++++++++++ ##############################
+
+- when designing a neural network multi-class classifier, you can use CrossEntropyLoss with no activation, 
+    or you can use NLLLoss with log-SoftMax activation. This applies only to multi-class classification. 
+    Binary classification and regression problems have a different set of rules.
+
+- NLL does not only care about the prediction being correct but also about the model being certain about 
+    the prediction with a high score.
+- When could it be used?
+    . Multi-class classification problems 
+
+- Unlike the Negative Log-Likelihood Loss, which doesn’t punish based on prediction confidence, 
+    Cross-Entropy punishes incorrect but confident predictions, as well as correct but less confident 
+    predictions. 
+- When could it be used?
+    . Binary classification tasks, for which it’s the default loss function in Pytorch.
+    . Creating confident models—the prediction will be accurate and with a higher probability.
