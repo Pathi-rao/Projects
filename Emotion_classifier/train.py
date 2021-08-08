@@ -9,37 +9,39 @@ from torchsummary import summary
 from sklearn.metrics import accuracy_score, confusion_matrix
 
 
+
+epochs = 5
+batch_size = 32
+learning_rate = 0.001
+print_every = 40
+
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print(f"Current device: ", device)
-epochs = 100
-batch_size = 32 
+
 
 
 train_loader, test_loader = dh.pre_processor(
                                 'C:\\Users\\User\\Desktop\\Strive_School\\Github\\Datasets\\archive\\fer2013\\',
-                                batch_size)
+                                batch_size= batch_size)
 
 #print(len(train_loader), len(test_loader))
 
-model = CNN() # base model that we created
+model = CNN().to(device)
 
 (summary(model, (1, 48, 48))) # prints the summary of the model. 48*48 is our input image size
 
-#define the optimizer and the loss
-optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+optimizer = optim.SGD(model.parameters(), lr=learning_rate, momentum=0.9)
 #scheduler = ReduceLROnPlateau(optimizer, 'max', factor = 0.5, verbose=True)
-# criterion = nn.NLLLoss()
 criterion = nn.CrossEntropyLoss()
 
-
-
-epochs = 3
-print_every = 40
 
 train_loss = []
 val_loss = []
 iters  = [] # save the iteration counts here for plotting
-#losses = [] # save the avg loss here for plotting
+
+
+n_total_steps = len(train_loader)
 
 for e in range(epochs):
     running_loss = 0
@@ -47,9 +49,11 @@ for e in range(epochs):
 
     for i, (images, labels) in enumerate(iter(train_loader)):
         
-        # print('oh yeah')
-        # actual = (labels < 3).reshape([1,1]).type(torch.FloatTensor)
-        # print(actual)
+        # print(images.shape())
+        # images = images.reshape(-1, 48*48).to(device)
+
+        images = images.to(device)
+        labels = labels.to(device)
 
         # reset the grdients
         optimizer.zero_grad()
@@ -62,8 +66,10 @@ for e in range(epochs):
         running_loss += loss.item()
         
         if i % print_every == 0:
+            print (f'Epoch [{e+1}/{epochs}], Step [{i+1}/{n_total_steps}], Loss: {loss.item():.4f}')
             print(f"\tIteration: {i}\t Loss: {running_loss/print_every:.4f}")
             running_loss = 0
+            
     train_loss.append(running_loss/images.shape[0])
 
     correct = 0
