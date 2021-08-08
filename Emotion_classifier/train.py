@@ -24,7 +24,9 @@ train_loader, test_loader = dh.pre_processor(
                                 'C:\\Users\\User\\Desktop\\Strive_School\\Github\\Datasets\\archive\\fer2013\\',
                                 batch_size= batch_size)
 
-#print(len(train_loader), len(test_loader))
+classes = ('Angry', 'Disgust', 'Fear', 'Happy',
+            'Neutral', 'Sad', 'Surprise')
+
 
 model = CNN().to(device)
 
@@ -38,9 +40,6 @@ criterion = nn.CrossEntropyLoss()
 
 train_loss = []
 val_loss = []
-iters  = [] # save the iteration counts here for plotting
-
-
 n_total_steps = len(train_loader)
 
 for e in range(epochs):
@@ -72,18 +71,42 @@ for e in range(epochs):
             
     train_loss.append(running_loss/images.shape[0])
 
+print('Finished Training')
+PATH = './cnn.pth'
+torch.save(model.state_dict(), PATH)
+
+
+with torch.no_grad():
     correct = 0
     total = 0
-    # since we're not training, we don't need to calculate the gradients for our outputs
-    with torch.no_grad():
-        for i, (images, labels) in enumerate(iter(test_loader)):
-            outputs = model(images)
-            v_loss = criterion(outputs, labels)
-            # the class with the highest energy is what we choose as prediction
-            _, predicted = torch.max(outputs.data, 1)
-            total += labels.size(0)
-            correct += (predicted == labels).sum().item()
-        val_loss.append(v_loss/images.shape[0])
+    n_class_correct = [0 for i in range(7)]
+    n_class_samples = [0 for i in range(7)]
 
-    print('Accuracy of the network on test images: %d %%' % (
-        100 * correct / total))
+    for i, (images, labels) in enumerate(iter(test_loader)):
+
+        images = images.to(device)
+        labels = labels.to(device)
+
+        outputs = model(images)
+        v_loss = criterion(outputs, labels)
+        # the class with the highest energy is what we choose as prediction
+        _, predicted = torch.max(outputs.data, 1)
+
+        total += labels.size(0)
+        correct += (predicted == labels).sum().item()
+
+        for i in range(batch_size):
+            label = labels[i]
+            pred = predicted[i]
+            if (label == pred):
+                n_class_correct[label] += 1
+            n_class_samples[label] += 1
+
+    # val_loss.append(v_loss/images.shape[0])
+
+print('Accuracy of the network on test images: %d %%' % (
+    100.0 * correct / total))
+
+for i in range(7):
+        acc = 100.0 * n_class_correct[i] / n_class_samples[i]
+        print(f'Accuracy of {classes[i]}: {acc} %')
