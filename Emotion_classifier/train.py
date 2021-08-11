@@ -1,13 +1,10 @@
 from model import CNN
 import datahandler as dh
-import matplotlib.pyplot as plt
 
 import torch
 import torch.nn as nn
 from torch import optim
 from torchsummary import summary
-from sklearn.metrics import accuracy_score, confusion_matrix
-
 
 
 epochs = 5
@@ -102,7 +99,7 @@ with torch.no_grad():
                 n_class_correct[label] += 1
             n_class_samples[label] += 1
 
-    # val_loss.append(v_loss/images.shape[0])
+    val_loss.append(v_loss/images.shape[0])
 
 print('Accuracy of the network on test images: %d %%' % (
     100.0 * correct / total))
